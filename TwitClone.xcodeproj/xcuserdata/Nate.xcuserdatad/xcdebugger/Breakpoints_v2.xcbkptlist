@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TwitClone/Tweet.swift"
+            timestampString = "434312116.293156"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "11"
+            endingLineNumber = "11"
+            landmarkName = "Tweet"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TwitClone/Tweet.swift"
+            timestampString = "434322561.056567"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "parseJSONDataIntoTweets(_:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TwitClone.Tweet.parseJSONDataIntoTweets (TwitClone.Tweet.Type)(ObjectiveC.NSData) -&gt; Swift.Optional&lt;Swift.Array&lt;TwitClone.Tweet&gt;&gt;"
+                  moduleName = "TwitClone"
+                  urlString = "file:///Users/Nate/Documents/XCodeProjects/iOSAccelerator/TwitClone/TwitClone/Tweet.swift"
+                  timestampString = "434323407.429516"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
+                  offsetFromSymbolStart = "1454">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "reabstraction thunk helper from @callee_owned (@owned TwitClone.Tweet, @owned TwitClone.Tweet) -&gt; (@unowned Swift.Bool) to @callee_owned (@in TwitClone.Tweet, @in TwitClone.Tweet) -&gt; (@unowned Swift.Bool)"
+                  moduleName = "TwitClone"
+                  urlString = "file:///Users/Nate/Documents/XCodeProjects/iOSAccelerator/TwitClone/TwitClone/Tweet.swift"
+                  timestampString = "434323407.430046"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "32"
+                  endingLineNumber = "32"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
