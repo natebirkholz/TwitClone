@@ -121,7 +121,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AOc-PZ-34h">
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AOc-PZ-34h">
                                 <rect key="frame" x="200" y="40" width="200" height="200"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -170,6 +170,13 @@
                                     <constraint firstAttribute="height" constant="30" id="p93-Rb-1Z1"/>
                                 </constraints>
                             </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="HwJ-4g-cUH">
+                                <rect key="frame" x="280" y="120" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="1fk-go-mKa"/>
+                                    <constraint firstAttribute="width" constant="40" id="KbT-cO-ubE"/>
+                                </constraints>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -177,6 +184,7 @@
                             <constraint firstItem="94W-bo-Jik" firstAttribute="leading" secondItem="sFQ-2Q-nPK" secondAttribute="trailing" id="6uU-gz-ETR"/>
                             <constraint firstItem="0Qz-mr-HHT" firstAttribute="top" secondItem="dSa-pC-9tR" secondAttribute="bottom" constant="8" id="7MH-E1-ydZ"/>
                             <constraint firstItem="0Qz-mr-HHT" firstAttribute="centerY" secondItem="sFQ-2Q-nPK" secondAttribute="centerY" id="86I-cd-fKb"/>
+                            <constraint firstItem="HwJ-4g-cUH" firstAttribute="centerX" secondItem="AOc-PZ-34h" secondAttribute="centerX" id="96d-wV-uqc"/>
                             <constraint firstItem="AOc-PZ-34h" firstAttribute="top" secondItem="V1L-MB-EOM" secondAttribute="bottom" constant="20" id="9nI-7V-gGJ"/>
                             <constraint firstItem="kmB-y9-rpd" firstAttribute="top" secondItem="AOc-PZ-34h" secondAttribute="bottom" constant="16" id="B72-d9-obU"/>
                             <constraint firstAttribute="trailingMargin" secondItem="kmB-y9-rpd" secondAttribute="trailing" constant="20" id="Geu-5Z-0vc"/>
@@ -184,6 +192,7 @@
                             <constraint firstItem="A5E-Uu-oMG" firstAttribute="centerY" secondItem="0Qz-mr-HHT" secondAttribute="centerY" id="JBK-Oo-nEF"/>
                             <constraint firstItem="94W-bo-Jik" firstAttribute="centerY" secondItem="sFQ-2Q-nPK" secondAttribute="centerY" id="Rg8-Hq-ugA"/>
                             <constraint firstItem="0Qz-mr-HHT" firstAttribute="leading" secondItem="hBS-e0-2Hy" secondAttribute="leadingMargin" constant="20" id="UaZ-zq-oYX"/>
+                            <constraint firstItem="HwJ-4g-cUH" firstAttribute="centerY" secondItem="AOc-PZ-34h" secondAttribute="centerY" id="WVI-la-yxI"/>
                             <constraint firstItem="94W-bo-Jik" firstAttribute="centerY" secondItem="A5E-Uu-oMG" secondAttribute="centerY" id="bye-cY-pE8"/>
                             <constraint firstAttribute="centerX" secondItem="AOc-PZ-34h" secondAttribute="centerX" id="dVe-6p-Jgd"/>
                             <constraint firstItem="dSa-pC-9tR" firstAttribute="leading" secondItem="hBS-e0-2Hy" secondAttribute="leadingMargin" constant="20" id="fQe-r9-LCs"/>
@@ -195,6 +204,7 @@
                     </view>
                     <connections>
                         <outlet property="favoriteLabel" destination="94W-bo-Jik" id="Ned-1k-OOU"/>
+                        <outlet property="loadingImage" destination="HwJ-4g-cUH" id="b5R-1V-D5a"/>
                         <outlet property="nameLabel" destination="kmB-y9-rpd" id="ObJ-WK-OCm"/>
                         <outlet property="retweetLabel" destination="A5E-Uu-oMG" id="8Of-23-nX8"/>
                         <outlet property="tweetLabel" destination="dSa-pC-9tR" id="eAS-ty-XPs"/>

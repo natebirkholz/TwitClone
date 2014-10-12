@@ -12,22 +12,25 @@ import Social
 
 
 class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+    // ---------------------------------------------
+    // #MARK: Variables
+    // ---------------------------------------------
+
     
-    var tweets : [Tweet]?
-    var twitterAccount : ACAccount?
-    var userFor : User?
-//    enum timeLineType {
-//        case home, user
-//    }
-    var timeLineType = 1
+    var tweets : [Tweet]? // Array of tweets downloaded
+    var twitterAccount : ACAccount? // User account
+    var userFor : User? // The user who owns the account
+    var timeLineType = 1 // 1 for home, 2 for user timelines. Couldn't seem to acces an enum across vc's
     var networkController : NetworkController!
+    var refreshControl : UIRefreshControl? // refresh control
+    var selectedUser : String? // Where i get the screenname for sepcifying a user in the user timeline
+    var imageCache = [String : UIImage]() // cache for images downloaded
+    let masterInterval : NSTimeInterval = 0.3
     
-    var refreshControl : UIRefreshControl?
-    
-    var selectedUser : String?
-    
-    var imageCache = [String : UIImage]()
-    
+    // ---------------------------------------------
+    // #MARK: Outlets
+    // ---------------------------------------------
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var userForImage: UIImageView!
@@ -35,6 +38,9 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var userForName: UILabel!
     
 
+    // ---------------------------------------------
+    // #MARK: Lifecycle
+    // ---------------------------------------------
 
     
     override func viewDidLoad() {
@@ -52,35 +58,30 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         self.refreshControl?.addTarget(self, action: "refreshTweets:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(self.refreshControl!)
         
-        
-        println("User name is now \(self.userFor?.userName)")
-        
-        println("view did load")
-        
         getTimeLine()
         
         
-        
-
-        
-        println("This User name is now \(self.userFor?.userName)")
-        
-        
     }
+    
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
         self.userForHandle.text = self.userFor?.screenName as String!
         self.userForName.text = self.userFor?.userName as String!
         self.userForImage.image = self.userFor?.userImageSmall as UIImage!
-        self.tableView.reloadData()
-        
-        UINavigationBar.appearance().backIndicatorImage = UIImage(named: "imgBack")
-        
-//        var backImg: UIImage = UIImage(named: "imgBack")
-//        backButton.setBackgroundImage(backImg, forState: .Normal, barMetrics: .Default)
 
+//        self.tableView.reloadData()
+        
+        reloadIt()
+
+        
     }
     
-    func getTimeLine () {
+    // ---------------------------------------------
+    // #MARK: Network Interaction
+    // ---------------------------------------------
+    
+    func getTimeLine () { // Choose a function dependent on the type of timeline
         if self.timeLineType == 1 {
             getHomeTimeline()
         } else if timeLineType == 2 {
@@ -92,39 +93,34 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     
     func getHomeTimeline() {
             // set the URL and add its parameters from the Twitter API for the Home timeline
-            // TODO: Get this from an enum and pass it from a closure so this is just one function
         let url = NSURL(string: "https://api.twitter.com/1.1/statuses/home_timeline.json")
         let parameters : Dictionary = ["count" : "50"]
         
         self.networkController.getAnyTimeLine(url, parameters: parameters, isRefresh: false, newestTweet: nil, oldestTweet: nil, completionHandler: { (errorDescription, tweets) -> (Void) in
             if errorDescription != nil {
                 println("Error Description is \(errorDescription)")
+                println("ERROROROROROR")
+                var alert = UIAlertController(title: "Error", message: "Server has denied your request, please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
+                
+                let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+                alert.addAction(defaultAction)
+                
+                self.presentViewController(alert, animated: true, completion: nil)
             } else {
                 self.tweets = tweets
-                
-//                println("tweets are now \(self.tweets)")
-                
                 var tweetForID = self.tweets?.first as Tweet!
-                
-                println("tweetforid is \(tweetForID.userName)")
-                
-                
                 self.setUserHeader()
-
                 
-                self.tableView.reloadData()
+                self.reloadIt()
             }
         })
-            // Store the kind of timeline viewed to be able to operate based on it
         
-        self.userForHandle.text = self.userFor?.screenName as String!
-        self.userForName.text = self.userFor?.userName as String!
-        self.userForImage.image = self.userFor?.userImageSmall as UIImage!
-        self.tableView.reloadData()
 
         self.userForHandle.text = self.userFor?.screenName as String!
         self.userForName.text = self.userFor?.userName as String!
         self.userForImage.image = self.userFor?.userImageSmall as UIImage!
+        
+        self.reloadIt()
         
         timeLineType = 1
 
@@ -132,97 +128,30 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func getUserTimeline() {
-            // set the URL and paramters from the Twitter API for the User's timeline
-            // TODO: Get this from an enum and pass it from a closure so this is just one function
         let url = NSURL(string: "https://api.twitter.com/1.1/statuses/user_timeline.json")
         let parameters : Dictionary = ["count" : "50", "screen_name" : selectedUser!]
         
-            // Call the GET from the Network controller using the properties above
         self.networkController.getAnyTimeLine(url, parameters: parameters, isRefresh: false, newestTweet: nil, oldestTweet: nil, completionHandler: { (errorDescription, tweets) -> (Void) in
             if errorDescription != nil {
                 println("Error Description is \(errorDescription)")
-            } else {
-                    // Store the tweets from the closure in the tweets variable for the VC and relaod the table to populate it
-                self.tweets = tweets
+                println("ERROROROROROR")
+                var alert = UIAlertController(title: "Error", message: "Server has denied your request, please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
                 
+                let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+                alert.addAction(defaultAction)
+                
+                self.presentViewController(alert, animated: true, completion: nil)
+            } else {
+                self.tweets = tweets
                 self.setUserHeader()
                 
-                self.tableView.reloadData()
+                self.reloadIt()
+                
             }
         })
         
-            // Store the kind of timeline viewed to be able to operate based on it
         timeLineType = 2
-
         
-    }
-    
-    func setUserHeader() {
-        if self.userFor == nil {
-            println("isnil")
-            self.networkController.getUserID({ (imageSmall, userName, userHandle, userDict) -> (Void) in
-                println("userName from closure is \(userName)")
-                self.userFor = User(imageSmall: imageSmall, userName: userName, userHandle: userHandle)
-                self.userFor!.userImageSmall = imageSmall as UIImage!
-                self.userFor!.screenName = userHandle as String!
-                self.userFor!.userName = userName as String!
-                println("user name on self is \(self.userFor!.userName)")
-                
-                self.userForHandle.text = self.userFor?.screenName as String!
-                self.userForName.text = self.userFor?.userName as String!
-                self.userForImage.image = self.userFor?.userImageSmall as UIImage!
-            })
-        }
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if self.tweets != nil {
-            return tweets!.count
-
-        } else {
-            return 0
-        }
-
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cellIdentifier = "TWEET_CELL"
-
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as TweetCell
-        
-        let tweetForRow = self.tweets?[indexPath.row]
-        cell.tweetLabel?.text = tweetForRow?.text
-        cell.nameLabel?.text = tweetForRow?.userName
-        cell.handleLabel?.text = tweetForRow?.screenName
-        cell.tweetLabel.preferredMaxLayoutWidth = cell.frame.size.width - 50 - 20
-        
-        if self.imageCache[tweetForRow!.userName] != nil {
-            cell.userView?.image = self.imageCache[tweetForRow!.userName]
-        } else {
-            
-            self.networkController.getUserImage(tweetForRow!, tweetDictionary: tweetForRow!.tweetDictionary, completionHandler: { (imageSmall, imageLarge) -> (Void) in
-                tweetForRow?.userImageSmall = imageSmall
-                tweetForRow?.userImageLarge = imageLarge
-                
-                cell.userView?.image = tweetForRow?.userImageSmall
-                self.imageCache[tweetForRow!.userName] = tweetForRow!.userImageSmall
-            })
-    
-            
-        }
-        
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let singleTweetView = self.storyboard?.instantiateViewControllerWithIdentifier("SINGLE_TWEET") as SingleTweetViewController
-        var selectedTweet = self.tweets![indexPath.row]
-        singleTweetView.selectedTweet = selectedTweet
-        
-        
-        self.navigationController?.pushViewController(singleTweetView, animated: true)
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -240,43 +169,30 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
             } else {
                 println("No timeline type set currently")
             }
-
+            
             self.networkController.getAnyTimeLine(url!, parameters: parameters!, isRefresh: true, newestTweet: nil, oldestTweet: self.tweets?.last, completionHandler: { (errorDescription, tweets) -> (Void) in
                 
                 if errorDescription != nil {
-                    //alert the user that something went wrong
+                    println("ERROROROROROR")
+                    var alert = UIAlertController(title: "Error", message: "Server has denied your request, please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
+                    
+                    let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+                    alert.addAction(defaultAction)
+                    
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    
                 } else {
                     
                     var interimTweets = tweets!
                     let tweetRemoved = interimTweets.removeAtIndex(0)
                     self.tweets? += interimTweets
-                    self.tableView.reloadData()
+                    
+                    self.reloadIt()
+                    
                 }
             })
         }
     }
-
-    
-    @IBAction func didTapUserSelf(sender: AnyObject) {
-        
-            let timeLineView = self.storyboard?.instantiateViewControllerWithIdentifier("TWEET_LIST`") as HomeTimelineViewController
-            
-            timeLineView.timeLineType = 2
-            timeLineView.selectedUser = self.userFor!.screenName
-            
-            
-            
-            self.navigationController?.pushViewController(timeLineView, animated: true)
-        
-    }
-    
-    @IBAction func didTapHomeButton(sender: UITapGestureRecognizer) {
-        
-        self.navigationController?.popToRootViewControllerAnimated(true)
-    }
-    
-    
-    
     
     func refreshTweets (sender: AnyObject) {
         
@@ -296,9 +212,16 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         let isRefresh = true
         
         self.networkController.getAnyTimeLine(url!, parameters: parameters!, isRefresh: true, newestTweet: self.tweets?[0], oldestTweet: nil) { (errorDescription, tweets) -> (Void) in
-     
+            
             if errorDescription != nil {
                 //alert the user that something went wrong
+                println("ERROROROROROR")
+                var alert = UIAlertController(title: "Error", message: "Server has denied your request, please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
+                
+                let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+                alert.addAction(defaultAction)
+                
+                self.presentViewController(alert, animated: true, completion: nil)
                 self.refreshControl?.endRefreshing()
             } else {
                 println(self.tweets?.count)
@@ -306,32 +229,128 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
                 tweetsInterim! += self.tweets!
                 self.tweets = tweetsInterim!
                 println("tweet count is \(self.tweets?.count)")
-                                self.refreshControl?.endRefreshing()
-                self.tableView.reloadData()
-
+                self.refreshControl?.endRefreshing()
+                
+                self.reloadIt()
+                
             }
         }
+    }
+    
+    // ---------------------------------------------
+    // #MARK: Table Header
+    // ---------------------------------------------
+    
+    func setUserHeader() { // Set up the header on the tableview with the user's image and information
+        if self.userFor == nil {
 
-            
+            self.networkController.getUserID({ (imageSmall, userName, userHandle, userDict) -> (Void) in
+                self.userFor = User(imageSmall: imageSmall, userName: userName, userHandle: userHandle)
+                
+                let interval : NSTimeInterval = self.masterInterval
+                UIView.transitionWithView(self.userForImage, duration: interval, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
+                    self.userForImage.image = self.userFor?.userImageSmall as UIImage!
+                    }, completion: nil)
+                UIView.transitionWithView(self.userForHandle, duration: interval, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
+                    self.userForHandle.text = self.userFor?.screenName as String!
+                    }, completion: nil)
+                UIView.transitionWithView(self.userForName, duration: interval, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
+                    self.userForName.text = self.userFor?.userName as String!
+                    }, completion: nil)
+                
+                println("user name on self is \(self.userFor!.userName)")
+                
+            })
+        }
+    }
+    
+    @IBAction func didTapUserSelf(sender: AnyObject) {
         
+        let timeLineView = self.storyboard?.instantiateViewControllerWithIdentifier("TWEET_LIST`") as HomeTimelineViewController
+        
+        timeLineView.timeLineType = 2
+        timeLineView.selectedUser = self.userFor!.screenName
+        
+        self.navigationController?.pushViewController(timeLineView, animated: true)
         
     }
-
     
+    @IBAction func didTapHomeButton(sender: UITapGestureRecognizer) {
         
+        self.navigationController?.popToRootViewControllerAnimated(true)
+    }
     
-//    @IBAction func changeTimeline(sender: UIButton) {
-//        if timeLine == timeLineType.user
-//        {
-//            getHomeTimeline()
-//        } else if timeLine == timeLineType.home {
-//            getUserTimeline()
-//        } else {
-//            println("Something went terribly wrong and I don't know what timeline to view")
-//        }
-//    }
+    // ---------------------------------------------
+    // #MARK: TableView
+    // ---------------------------------------------
     
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if self.tweets != nil {
+            return tweets!.count
 
+        } else {
+            return 0
+        }
+
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cellIdentifier = "TWEET_CELL"
+
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as TweetCell
+        let tweetForRow = self.tweets?[indexPath.row]
+        let interval : NSTimeInterval = self.masterInterval
+        
+        UIView.transitionWithView(cell, duration: interval, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
+
+            cell.tweetLabel.text = tweetForRow?.text
+            cell.nameLabel.text = tweetForRow?.userName
+            cell.handleLabel.text = tweetForRow?.screenName
+            
+            cell.tweetLabel.preferredMaxLayoutWidth = cell.frame.size.width - 50 - 20
+            
+            if self.imageCache[tweetForRow!.userName] != nil {
+                cell.userView?.image = self.imageCache[tweetForRow!.userName]
+            } else {
+                
+                self.networkController.getUserImage(tweetForRow!, tweetDictionary: tweetForRow!.tweetDictionary, completionHandler: { (imageSmall, imageLarge) -> (Void) in
+                    tweetForRow?.userImageSmall = imageSmall
+                    tweetForRow?.userImageLarge = imageLarge
+                    
+                    cell.userView?.image = tweetForRow?.userImageSmall
+                    self.imageCache[tweetForRow!.userName] = tweetForRow!.userImageSmall
+                })
+                
+                
+            }
+            
+        }, completion: nil)
+        
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let singleTweetView = self.storyboard?.instantiateViewControllerWithIdentifier("SINGLE_TWEET") as SingleTweetViewController
+        var selectedTweet = self.tweets![indexPath.row]
+        singleTweetView.selectedTweet = selectedTweet
+        
+        self.navigationController?.pushViewController(singleTweetView, animated: true)
+    }
+    
+    func reloadIt () {
+        // Experimenting with straight reloads of TableView or crossfade reloads of tableview
+        // pluses and minuses to each
+        
+        //        self.tableView.reloadData()
+        
+        let interval : NSTimeInterval = self.masterInterval
+        UIView.transitionWithView(self.tableView, duration: interval, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
+            self.tableView.reloadData()
+            }, completion: nil)
+    }
 
 
 }

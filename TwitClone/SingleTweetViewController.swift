@@ -10,21 +10,49 @@ import UIKit
 
 class SingleTweetViewController: UIViewController {
     
+    // ---------------------------------------------
+    // #MARK: Variables
+    // ---------------------------------------------
+    
     var selectedTweet : Tweet!
+    var networkController : NetworkController!
 
-
+    // ---------------------------------------------
+    // #MARK: Outlets
+    // ---------------------------------------------
 
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var tweetLabel: UILabel!
     @IBOutlet weak var favoriteLabel: UILabel!
     @IBOutlet weak var retweetLabel: UILabel!
-    @IBOutlet weak var backButton: UIBarButtonItem!
+    @IBOutlet weak var loadingImage: UIActivityIndicatorView!
 
+    // ---------------------------------------------
+    // #MARK: Lifecycle
+    // ---------------------------------------------
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.userImageView.image = selectedTweet.userImageLarge
+        var appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        self.networkController = appDelegate.networkController
+        
+        if self.selectedTweet.userImageLarge == nil { // Sometime network lag fails to have the image
+            self.loadingImage.startAnimating()
+            
+            self.networkController.getUserImage(selectedTweet!, tweetDictionary: selectedTweet!.tweetDictionary, completionHandler: { (imageSmall, imageLarge) -> (Void) in
+                self.selectedTweet?.userImageSmall = imageSmall
+                self.selectedTweet?.userImageLarge = imageLarge
+                self.userImageView.image = self.selectedTweet.userImageLarge
+                self.loadingImage.stopAnimating()
+
+            })
+
+        } else {
+            self.userImageView.image = selectedTweet.userImageLarge
+        }
+        
         self.nameLabel.text = selectedTweet.userName
         self.tweetLabel.text = selectedTweet.text
 
@@ -32,16 +60,21 @@ class SingleTweetViewController: UIViewController {
         let retweetText = String(selectedTweet.tweetRetweets!)
         self.favoriteLabel.text = favText as String
         self.retweetLabel.text = retweetText as String
+        
+        self.navigationItem.leftBarButtonItem?.image = UIImage(named: "imgBack")
+        
+        println("selected image is \(selectedTweet.userImageLarge?.description)")
 
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-//        var backImg: UIImage = UIImage(named: "imgBack")
-//        backButton.setBackgroundImage(backImg, forState: .Normal, barMetrics: .Default)
+
     }
+    
+    // ---------------------------------------------
+    // #MARK: Interaction
+    // ---------------------------------------------
 
     @IBAction func didTap(sender: UITapGestureRecognizer) {
         let timeLineView = self.storyboard?.instantiateViewControllerWithIdentifier("TWEET_LIST`") as HomeTimelineViewController
@@ -53,9 +86,5 @@ class SingleTweetViewController: UIViewController {
         
         self.navigationController?.pushViewController(timeLineView, animated: true)
     }
-
-
-    
-
 
 }

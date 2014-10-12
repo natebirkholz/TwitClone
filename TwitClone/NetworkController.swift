@@ -72,6 +72,7 @@ class NetworkController {
                         println("client's fault")
                         println(httpResponse.description)
                         completionHandler(errorDescription: "Bad request to server", tweets: nil)
+                        
                     case 500...599:
                         println("server's fault")
                         completionHandler(errorDescription: "Unable to contact server", tweets: nil)
@@ -80,15 +81,8 @@ class NetworkController {
                     }
                     
                 })
-                
-                
-
             }
-            
-            
         }
-
-        
     }
     
     func getUserID(completionHandler : (imageSmall : UIImage, userName: String, userHandle: String, userDict: NSDictionary) -> (Void)) ->Void {
@@ -114,10 +108,8 @@ class NetworkController {
             let userHandle = userDictionary["screen_name"] as String
             let userDict = tweetDictionary
             
-            
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 completionHandler(imageSmall: userImageSmall, userName: userName, userHandle: userHandle, userDict: userDict)                })
-            
             
         })
     }
@@ -143,20 +135,8 @@ class NetworkController {
                 completionHandler(imageSmall: userImageSmall, imageLarge: userImageLarge)
  
             })
-                
-
-            
         }
-        
-
-        
-        
     }
     
-
-
-
-
-
 
 }

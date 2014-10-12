@@ -44,17 +44,12 @@ class Tweet {
         if let JSONArray = NSJSONSerialization.JSONObjectWithData(rawJSONData, options: nil, error: &error) as? NSArray {
             
             var tweets = [Tweet]()
-            
             for JSONDictionary in JSONArray {
-                if let tweetDictionary = JSONDictionary as? NSDictionary {
-                    var newTweet = Tweet(tweetDictionary : tweetDictionary)
-                    
-                    tweets.append(newTweet)
-
-
-                    
-                }
+            if let tweetDictionary = JSONDictionary as? NSDictionary {
+                var newTweet = Tweet(tweetDictionary : tweetDictionary)
+                tweets.append(newTweet)
                 
+                }
             }
             
 //            tweets.sort { $0.date < $1.date }
@@ -68,24 +63,6 @@ class Tweet {
         return nil
     }
     
-//    class func makeJSONDataIntoTweet(rawJSONData : NSData) -> Tweet {
-//        var error : NSError?
-//        
-//        if let tweetDictionary = NSJSONSerialization.JSONObjectWithData(rawJSONData, options: nil, error: &error) as? NSDictionary {
-//            
-//            var tweet = Tweet(tweetDictionary: tweetDictionary)
-//            
-//            println("the alternative tweet is \(tweet)")
-//            
-//            return tweet
-//
-//            
-//            }
-//            
-//        
-//        
-//
-//    
-//}
+
 
 }
