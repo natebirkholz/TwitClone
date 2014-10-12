@@ -6,18 +6,19 @@
 //  Copyright (c) 2014 Nate Birkholz. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class Tweet {
     
     var text : String
-    var userImage : UIImage?
+    var userImageSmall : UIImage?
+    var userImageLarge : UIImage?
     var userName : String
+    var screenName : String
     var tweetDictionary : NSDictionary
     var tweetID : Int
     var tweetFavorites : Int?
-//    var date : NSDate?
+    var tweetRetweets : Int?
     
     
     init (tweetDictionary : NSDictionary) {
@@ -28,7 +29,11 @@ class Tweet {
         
         var userDictionary = tweetDictionary["user"] as NSDictionary
         
+        self.tweetFavorites = tweetDictionary["favorite_count"] as? Int
+        self.tweetRetweets = tweetDictionary["retweet_count"] as? Int
+        
         self.userName = userDictionary["name"] as String
+        self.screenName = userDictionary["screen_name"] as String
 
 
     }
@@ -63,24 +68,24 @@ class Tweet {
         return nil
     }
     
-    class func makeJSONDataIntoTweet(rawJSONData : NSData) -> Tweet? {
-        var error : NSError?
-        
-        if let tweetDictionary = NSJSONSerialization.JSONObjectWithData(rawJSONData, options: nil, error: &error) as? NSDictionary {
-            
-            var tweet = Tweet(tweetDictionary : tweetDictionary)
-            
-            println("the alternative tweet is \(tweet)")
-            
-            return tweet
+//    class func makeJSONDataIntoTweet(rawJSONData : NSData) -> Tweet {
+//        var error : NSError?
+//        
+//        if let tweetDictionary = NSJSONSerialization.JSONObjectWithData(rawJSONData, options: nil, error: &error) as? NSDictionary {
+//            
+//            var tweet = Tweet(tweetDictionary: tweetDictionary)
+//            
+//            println("the alternative tweet is \(tweet)")
+//            
+//            return tweet
+//
+//            
+//            }
+//            
+//        
+//        
+//
+//    
+//}
 
-            
-            }
-            
-        
-            return nil
-            
-        }
-
-    
 }

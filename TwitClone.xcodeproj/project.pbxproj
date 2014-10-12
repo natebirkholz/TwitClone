@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43168F3819E79DFE0037DB7A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43168F3719E79DFE0037DB7A /* User.swift */; };
 		438067D019E5B4BC009D5365 /* NetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438067CF19E5B4BC009D5365 /* NetworkController.swift */; };
 		438067D219E5FD86009D5365 /* SingleTweetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438067D119E5FD86009D5365 /* SingleTweetViewController.swift */; };
+		438067D419E70867009D5365 /* TweetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 438067D319E70867009D5365 /* TweetCell.xib */; };
 		4396A6A119E502690061DD73 /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4396A6A019E502690061DD73 /* TweetCell.swift */; };
 		43F8BFF219E30A1C001282A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F8BFF119E30A1C001282A0 /* AppDelegate.swift */; };
 		43F8BFF519E30A1C001282A0 /* TwitClone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 43F8BFF319E30A1C001282A0 /* TwitClone.xcdatamodeld */; };
@@ -32,8 +34,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		43168F3719E79DFE0037DB7A /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		438067CF19E5B4BC009D5365 /* NetworkController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkController.swift; sourceTree = "<group>"; };
 		438067D119E5FD86009D5365 /* SingleTweetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleTweetViewController.swift; sourceTree = "<group>"; };
+		438067D319E70867009D5365 /* TweetCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetCell.xib; sourceTree = "<group>"; };
 		4396A6A019E502690061DD73 /* TweetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		43F8BFEC19E30A1C001282A0 /* TwitClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43F8BFF019E30A1C001282A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -132,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				43F8C01919E3135A001282A0 /* Tweet.swift */,
+				43168F3719E79DFE0037DB7A /* User.swift */,
 			);
 			name = "Model Layer";
 			sourceTree = "<group>";
@@ -140,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				4396A6A019E502690061DD73 /* TweetCell.swift */,
+				438067D319E70867009D5365 /* TweetCell.xib */,
 			);
 			name = "View Layer";
 			sourceTree = "<group>";
@@ -235,6 +241,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43F8BFFA19E30A1D001282A0 /* Main.storyboard in Resources */,
+				438067D419E70867009D5365 /* TweetCell.xib in Resources */,
 				43F8BFFF19E30A1D001282A0 /* LaunchScreen.xib in Resources */,
 				43F8BFFC19E30A1D001282A0 /* Images.xcassets in Resources */,
 				43F8C01C19E330A3001282A0 /* tweet.json in Resources */,
@@ -259,6 +266,7 @@
 				43F8C01819E31121001282A0 /* HomeTimelineViewController.swift in Sources */,
 				438067D019E5B4BC009D5365 /* NetworkController.swift in Sources */,
 				438067D219E5FD86009D5365 /* SingleTweetViewController.swift in Sources */,
+				43168F3819E79DFE0037DB7A /* User.swift in Sources */,
 				4396A6A119E502690061DD73 /* TweetCell.swift in Sources */,
 				43F8BFF519E30A1C001282A0 /* TwitClone.xcdatamodeld in Sources */,
 				43F8C01A19E3135A001282A0 /* Tweet.swift in Sources */,

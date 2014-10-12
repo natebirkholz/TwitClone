@@ -13,49 +13,49 @@ class SingleTweetViewController: UIViewController {
     var selectedTweet : Tweet!
 
 
+
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var tweetLabel: UILabel!
     @IBOutlet weak var favoriteLabel: UILabel!
+    @IBOutlet weak var retweetLabel: UILabel!
+    @IBOutlet weak var backButton: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        println("VIEW LOADED >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        
-        self.userImageView.image = selectedTweet.userImage
+        self.userImageView.image = selectedTweet.userImageLarge
         self.nameLabel.text = selectedTweet.userName
         self.tweetLabel.text = selectedTweet.text
-        let x = selectedTweet.tweetFavorites
-        var idText = String(x!)
-        self.favoriteLabel.text = idText as String
+
+        let favText = String(selectedTweet.tweetFavorites!)
+        let retweetText = String(selectedTweet.tweetRetweets!)
+        self.favoriteLabel.text = favText as String
+        self.retweetLabel.text = retweetText as String
 
         // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-    @IBAction func goBack(sender: UIButton) {
-        println("---------------------------------------------------------------------------------------------------")
-        self.performSegueWithIdentifier("comeHome", sender: self)
-        println("---------------------------------------------------------------------------------------------------")
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+//        var backImg: UIImage = UIImage(named: "imgBack")
+//        backButton.setBackgroundImage(backImg, forState: .Normal, barMetrics: .Default)
     }
+
+    @IBAction func didTap(sender: UITapGestureRecognizer) {
+        let timeLineView = self.storyboard?.instantiateViewControllerWithIdentifier("TWEET_LIST`") as HomeTimelineViewController
+
+        timeLineView.timeLineType = 2
+        timeLineView.selectedUser = self.selectedTweet!.screenName
+        
+        
+        
+        self.navigationController?.pushViewController(timeLineView, animated: true)
+    }
+
+
     
-//    @IBAction func unwindToMainMenu(sender : UIStoryboardSegue) {
-//        
-//    }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
