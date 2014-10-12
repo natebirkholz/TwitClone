@@ -25,8 +25,9 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     var networkController : NetworkController!
     var refreshControl : UIRefreshControl? // refresh control
     var selectedUser : String? // Where i get the screenname for sepcifying a user in the user timeline
-    var imageCache = [String : UIImage]() // cache for images downloaded
-    let masterInterval : NSTimeInterval = 0.3
+    var imageCache = [String : UIImage]() // cache for images downloaded, in collaboration with Will Richman on Friendship Friday.
+
+    let masterInterval : NSTimeInterval = 0.3 // COnstant for crossfades
     
     // ---------------------------------------------
     // #MARK: Outlets
@@ -158,6 +159,7 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == self.tweets!.count - 3 {
+            // In collaboration with Will Richman on Friendship Friday.
             
             var url : NSURL?
             var parameters : Dictionary<String, String>?
@@ -196,7 +198,8 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func refreshTweets (sender: AnyObject) {
-        
+        // In collaboration with Will Richman on Friendship Friday.
+
         var url : NSURL?
         var parameters : Dictionary<String, String>?
         
@@ -306,6 +309,8 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
             cell.handleLabel.text = tweetForRow?.screenName
             
             cell.tweetLabel.preferredMaxLayoutWidth = cell.frame.size.width - 50 - 20
+            
+            // Caching implememnted in collaboration with Will Richman on Friendship Friday.
             
             if self.imageCache[tweetForRow!.userName] != nil {
                 cell.userView?.image = self.imageCache[tweetForRow!.userName]
