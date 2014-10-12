@@ -62,8 +62,6 @@ class SingleTweetViewController: UIViewController {
         self.retweetLabel.text = retweetText as String
         
         self.navigationItem.leftBarButtonItem?.image = UIImage(named: "imgBack")
-        
-        println("selected image is \(selectedTweet.userImageLarge?.description)")
 
     }
     

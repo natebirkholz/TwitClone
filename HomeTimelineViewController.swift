@@ -77,6 +77,10 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         
     }
     
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        reloadIt()
+    }
+    
     // ---------------------------------------------
     // #MARK: Network Interaction
     // ---------------------------------------------
@@ -99,7 +103,6 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         self.networkController.getAnyTimeLine(url, parameters: parameters, isRefresh: false, newestTweet: nil, oldestTweet: nil, completionHandler: { (errorDescription, tweets) -> (Void) in
             if errorDescription != nil {
                 println("Error Description is \(errorDescription)")
-                println("ERROROROROROR")
                 var alert = UIAlertController(title: "Error", message: "Server has denied your request, please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
                 
                 let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
@@ -134,7 +137,6 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
         self.networkController.getAnyTimeLine(url, parameters: parameters, isRefresh: false, newestTweet: nil, oldestTweet: nil, completionHandler: { (errorDescription, tweets) -> (Void) in
             if errorDescription != nil {
                 println("Error Description is \(errorDescription)")
-                println("ERROROROROROR")
                 var alert = UIAlertController(title: "Error", message: "Server has denied your request, please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
                 
                 let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
@@ -173,7 +175,6 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
             self.networkController.getAnyTimeLine(url!, parameters: parameters!, isRefresh: true, newestTweet: nil, oldestTweet: self.tweets?.last, completionHandler: { (errorDescription, tweets) -> (Void) in
                 
                 if errorDescription != nil {
-                    println("ERROROROROROR")
                     var alert = UIAlertController(title: "Error", message: "Server has denied your request, please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
                     
                     let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
@@ -215,7 +216,6 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
             
             if errorDescription != nil {
                 //alert the user that something went wrong
-                println("ERROROROROROR")
                 var alert = UIAlertController(title: "Error", message: "Server has denied your request, please try again later.", preferredStyle: UIAlertControllerStyle.Alert)
                 
                 let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
@@ -224,11 +224,9 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
                 self.presentViewController(alert, animated: true, completion: nil)
                 self.refreshControl?.endRefreshing()
             } else {
-                println(self.tweets?.count)
                 var tweetsInterim : [Tweet]? = tweets
                 tweetsInterim! += self.tweets!
                 self.tweets = tweetsInterim!
-                println("tweet count is \(self.tweets?.count)")
                 self.refreshControl?.endRefreshing()
                 
                 self.reloadIt()
@@ -257,8 +255,6 @@ class HomeTimelineViewController: UIViewController, UITableViewDataSource, UITab
                 UIView.transitionWithView(self.userForName, duration: interval, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
                     self.userForName.text = self.userFor?.userName as String!
                     }, completion: nil)
-                
-                println("user name on self is \(self.userFor!.userName)")
                 
             })
         }

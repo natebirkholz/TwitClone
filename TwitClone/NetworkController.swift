@@ -61,8 +61,6 @@ class NetworkController {
                     case 200...299:
                         let tweets = Tweet.parseJSONDataIntoTweets(data)
                         self.tweets = tweets!
-                        println("Did that")
-                        println(tweets?.count)
                         
                         NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                             completionHandler(errorDescription: nil, tweets: tweets)
